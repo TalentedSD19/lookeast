@@ -23,7 +23,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
   return (
     <>
       <SiteHeader />
-      <main className="max-w-3xl mx-auto px-4 py-10">
+      <main className="flex-1 max-w-3xl mx-auto px-4 py-10">
         <Badge className="bg-brand-red text-white mb-4">{article.category.name}</Badge>
         <h1 className="font-serif text-4xl font-bold leading-tight mb-4">{article.title}</h1>
         <p className="text-gray-500 text-sm mb-6">

@@ -23,7 +23,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
   return (
     <>
       <SiteHeader />
-      <main className="max-w-7xl mx-auto px-4 py-10">
+      <main className="flex-1 w-full px-6 py-10">
         <h1 className="font-serif text-3xl font-bold mb-8">{category.name}</h1>
         <ArticleGrid articles={articles as ArticleWithRelations[]} />
       </main>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
@@ -8,9 +9,15 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/dashboard/articles", label: "Articles" },
   { href: "/dashboard/categories", label: "Categories" },
+  { href: "/dashboard/profile", label: "Profile" },
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+  userName: string;
+  avatarUrl: string | null;
+}
+
+export default function AdminSidebar({ userName, avatarUrl }: AdminSidebarProps) {
   const pathname = usePathname();
 
   return (
@@ -19,8 +26,28 @@ export default function AdminSidebar() {
         <Link href="/" className="font-serif text-xl font-bold hover:text-brand-red transition-colors">
           LookEast
         </Link>
-        <p className="text-xs text-gray-400 mt-1">Admin</p>
       </div>
+
+      {/* User identity */}
+      <Link
+        href="/dashboard/profile"
+        className="flex items-center gap-3 px-4 py-4 border-b border-white/10 hover:bg-white/5 transition-colors"
+      >
+        <div className="relative w-9 h-9 rounded-full overflow-hidden bg-brand-red shrink-0 flex items-center justify-center">
+          {avatarUrl ? (
+            <Image src={avatarUrl} alt={userName} fill className="object-cover" />
+          ) : (
+            <span className="text-sm font-bold text-white select-none">
+              {userName.charAt(0).toUpperCase()}
+            </span>
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-white truncate">{userName}</p>
+          <p className="text-xs text-gray-400">Edit profile</p>
+        </div>
+      </Link>
+
       <nav className="flex-1 px-3 py-4 space-y-1">
         {navItems.map((item) => (
           <Link
@@ -37,6 +64,7 @@ export default function AdminSidebar() {
           </Link>
         ))}
       </nav>
+
       <div className="px-3 py-4 border-t border-white/10">
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}

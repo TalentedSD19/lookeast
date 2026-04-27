@@ -9,18 +9,18 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, excerpt, body: content, coverImage, categoryId, status } = body;
+  const { title, slug: slugInput, excerpt, body: content, coverImage, categoryId, status } = body;
 
   const existing = await prisma.article.findUnique({ where: { id: params.id } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let slug = existing.slug;
-  if (title && title !== existing.title) {
-    const baseSlug = slugify(title);
-    slug = baseSlug;
+  const desiredSlug = slugInput || (title ? slugify(title) : null);
+  if (desiredSlug && desiredSlug !== existing.slug) {
+    slug = desiredSlug;
     let suffix = 1;
     while (await prisma.article.findFirst({ where: { slug, NOT: { id: params.id } } })) {
-      slug = `${baseSlug}-${suffix++}`;
+      slug = `${desiredSlug}-${suffix++}`;
     }
   }
 
@@ -29,7 +29,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const article = await prisma.article.update({
     where: { id: params.id },
     data: {
-      ...(title && { title, slug }),
+      ...(title && { title }),
+      slug,
       ...(excerpt && { excerpt }),
       ...(content && { body: content }),
       ...(coverImage !== undefined && { coverImage }),

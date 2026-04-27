@@ -14,6 +14,7 @@ interface Props {
 
 export default function RichTextEditor({ value, onChange }: Props) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Image,

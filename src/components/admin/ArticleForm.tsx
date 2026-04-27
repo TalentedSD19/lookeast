@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ImageUploader from "./ImageUploader";
 import { slugify } from "@/lib/utils";
 import type { ArticleWithRelations } from "@/types";
@@ -42,7 +41,7 @@ export default function ArticleForm({ article, categories }: Props) {
     setSaving(true);
     setError("");
 
-    const payload = { title, excerpt, body, coverImage, categoryId, status };
+    const payload = { title, slug, excerpt, body, coverImage, categoryId, status };
     const url = article ? `/api/articles/${article.id}` : "/api/articles";
     const method = article ? "PATCH" : "POST";
 
@@ -82,17 +81,19 @@ export default function ArticleForm({ article, categories }: Props) {
       </div>
 
       <div className="space-y-1">
-        <Label>Category</Label>
-        <Select value={categoryId} onValueChange={(v) => v && setCategoryId(v)} required>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor="category">Category</Label>
+        <select
+          id="category"
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
+          required
+          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+        >
+          <option value="" disabled>Select a category</option>
+          {categories.map((cat) => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
       </div>
 
       <ImageUploader value={coverImage} onChange={setCoverImage} />
@@ -103,16 +104,16 @@ export default function ArticleForm({ article, categories }: Props) {
       </div>
 
       <div className="space-y-1">
-        <Label>Status</Label>
-        <Select value={status} onValueChange={(v) => setStatus(v as "DRAFT" | "PUBLISHED")}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="DRAFT">Draft</SelectItem>
-            <SelectItem value="PUBLISHED">Published</SelectItem>
-          </SelectContent>
-        </Select>
+        <Label htmlFor="status">Status</Label>
+        <select
+          id="status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value as "DRAFT" | "PUBLISHED")}
+          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+        >
+          <option value="DRAFT">Draft</option>
+          <option value="PUBLISHED">Published</option>
+        </select>
       </div>
 
       <div className="flex gap-3">
