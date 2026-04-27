@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:lookeast.in)",
+      "WebFetch(domain:eastindiastory.com)",
+      "WebFetch(domain:www.indiatoday.in)",
+      "Bash(npx create-next-app *)",
+      "Bash(npm list *)",
+      "Bash(npm show *)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

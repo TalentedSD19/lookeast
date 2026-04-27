@@ -1,0 +1,16 @@
+import { ArticleWithRelations } from "@/types";
+import ArticleCard from "./ArticleCard";
+
+export default function ArticleGrid({ articles }: { articles: ArticleWithRelations[] }) {
+  if (articles.length === 0) {
+    return <p className="text-center text-gray-500 py-20">No articles yet.</p>;
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {articles.map((article) => (
+        <ArticleCard key={article.id} article={article} />
+      ))}
+    </div>
+  );
+}
