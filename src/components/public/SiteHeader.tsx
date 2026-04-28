@@ -5,7 +5,7 @@ import CategoryNav from "./CategoryNav";
 import SearchBar from "./SearchBar";
 
 export default async function SiteHeader() {
-  const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
+  const categories = await prisma.category.findMany({ orderBy: { name: "asc" } }).catch(() => []);
 
   return (
     <header className="bg-brand-dark text-white sticky top-0 z-50 shadow-md">
