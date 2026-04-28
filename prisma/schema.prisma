@@ -26,26 +26,72 @@ model Category {
 }
 
 model Article {
-  id          String        @id @default(cuid())
-  title       String
-  slug        String        @unique
-  excerpt     String
-  body        String
-  coverImage  String?
-  status      ArticleStatus @default(DRAFT)
-  publishedAt DateTime?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  authorId    String
-  author      User          @relation(fields: [authorId], references: [id])
-  categoryId  String
-  category    Category      @relation(fields: [categoryId], references: [id])
+  id           String        @id @default(cuid())
+  title        String
+  slug         String        @unique
+  excerpt      String
+  body         String
+  coverImage   String?
+  reporterName String?
+  twitterUrl   String?
+  status       ArticleStatus @default(DRAFT)
+  publishedAt  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  authorId     String
+  author       User          @relation(fields: [authorId], references: [id])
+  categoryId   String
+  category     Category      @relation(fields: [categoryId], references: [id])
+  views        ArticleView[]
+  comments     Comment[]
+  votes        Vote[]
 
   @@index([status, publishedAt])
   @@index([categoryId])
 }
 
+model ArticleView {
+  id        String   @id @default(cuid())
+  articleId String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  country   String?
+  region    String?
+  city      String?
+  viewedAt  DateTime @default(now())
+
+  @@index([articleId])
+  @@index([articleId, country])
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  authorName String
+  body       String
+  createdAt  DateTime @default(now())
+
+  @@index([articleId])
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  articleId  String
+  article    Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  voterToken String
+  voteType   VoteType
+  createdAt  DateTime @default(now())
+
+  @@unique([articleId, voterToken])
+  @@index([articleId])
+}
+
 enum ArticleStatus {
   DRAFT
   PUBLISHED
+}
+
+enum VoteType {
+  UP
+  DOWN
 }

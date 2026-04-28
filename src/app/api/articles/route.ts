@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, excerpt, body: content, coverImage, categoryId, status } = body;
+  const { title, excerpt, body: content, coverImage, categoryId, status, reporterName, twitterUrl } = body;
 
   if (!title || !excerpt || !content || !categoryId) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
       excerpt,
       body: content,
       coverImage: coverImage || null,
+      reporterName: reporterName || null,
+      twitterUrl: twitterUrl || null,
       categoryId,
       authorId: session.user.id,
       status: status === "PUBLISHED" ? "PUBLISHED" : "DRAFT",

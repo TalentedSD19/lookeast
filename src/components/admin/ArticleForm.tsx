@@ -24,10 +24,12 @@ export default function ArticleForm({ article, categories }: Props) {
   const router = useRouter();
   const [title, setTitle] = useState(article?.title ?? "");
   const [slug, setSlug] = useState(article?.slug ?? "");
+  const [reporterName, setReporterName] = useState(article?.reporterName ?? "");
   const [excerpt, setExcerpt] = useState(article?.excerpt ?? "");
   const [body, setBody] = useState(article?.body ?? "");
   const [coverImage, setCoverImage] = useState(article?.coverImage ?? "");
   const [categoryId, setCategoryId] = useState(article?.categoryId ?? "");
+  const [twitterUrl, setTwitterUrl] = useState(article?.twitterUrl ?? "");
   const [status, setStatus] = useState<"DRAFT" | "PUBLISHED">(article?.status ?? "DRAFT");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -41,7 +43,7 @@ export default function ArticleForm({ article, categories }: Props) {
     setSaving(true);
     setError("");
 
-    const payload = { title, slug, excerpt, body, coverImage, categoryId, status };
+    const payload = { title, slug, reporterName, excerpt, body, coverImage, categoryId, twitterUrl, status };
     const url = article ? `/api/articles/${article.id}` : "/api/articles";
     const method = article ? "PATCH" : "POST";
 
@@ -76,6 +78,16 @@ export default function ArticleForm({ article, categories }: Props) {
       </div>
 
       <div className="space-y-1">
+        <Label htmlFor="reporterName">Reporter Name</Label>
+        <Input
+          id="reporterName"
+          value={reporterName}
+          onChange={(e) => setReporterName(e.target.value)}
+          placeholder="e.g. Rina Chowdhury"
+        />
+      </div>
+
+      <div className="space-y-1">
         <Label htmlFor="excerpt">Excerpt</Label>
         <Textarea id="excerpt" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={3} required />
       </div>
@@ -101,6 +113,18 @@ export default function ArticleForm({ article, categories }: Props) {
       <div className="space-y-1">
         <Label>Body</Label>
         <RichTextEditor value={body} onChange={setBody} />
+      </div>
+
+      <div className="space-y-1">
+        <Label htmlFor="twitterUrl">Twitter / X Post URL (optional)</Label>
+        <Input
+          id="twitterUrl"
+          type="url"
+          value={twitterUrl}
+          onChange={(e) => setTwitterUrl(e.target.value)}
+          placeholder="https://twitter.com/user/status/..."
+        />
+        <p className="text-xs text-gray-400">Paste a tweet URL to embed it inside the article.</p>
       </div>
 
       <div className="space-y-1">
