@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/utils";
 import DeleteArticleButton from "./DeleteArticleButton";
+import PublishToggleButton from "./PublishToggleButton";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,7 @@ export default async function ArticlesListPage() {
     orderBy: { createdAt: "desc" },
     include: {
       category: { select: { name: true } },
+      _count: { select: { views: true, comments: true } },
     },
   });
 
@@ -35,6 +37,8 @@ export default async function ArticlesListPage() {
               <TableHead>Title</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Views</TableHead>
+              <TableHead>Comments</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -49,9 +53,18 @@ export default async function ArticlesListPage() {
                     {a.status}
                   </Badge>
                 </TableCell>
+                <TableCell className="text-gray-500">{a._count.views}</TableCell>
+                <TableCell className="text-gray-500">{a._count.comments}</TableCell>
                 <TableCell>{formatDate(a.createdAt)}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
+                    <PublishToggleButton id={a.id} currentStatus={a.status} />
+                    <Link
+                      href={`/dashboard/articles/${a.id}/metrics`}
+                      className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+                    >
+                      Metrics
+                    </Link>
                     <Link
                       href={`/dashboard/articles/${a.id}/edit`}
                       className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
@@ -65,7 +78,7 @@ export default async function ArticlesListPage() {
             ))}
             {articles.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-gray-400 py-10">
+                <TableCell colSpan={7} className="text-center text-gray-400 py-10">
                   No articles yet.
                 </TableCell>
               </TableRow>

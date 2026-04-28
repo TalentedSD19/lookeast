@@ -9,7 +9,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, slug: slugInput, excerpt, body: content, coverImage, categoryId, status } = body;
+  const { title, slug: slugInput, excerpt, body: content, coverImage, categoryId, status, reporterName, twitterUrl } = body;
 
   const existing = await prisma.article.findUnique({ where: { id: params.id } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -37,6 +37,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       ...(categoryId && { categoryId }),
       ...(status && { status }),
       ...(nowPublishing && { publishedAt: new Date() }),
+      ...(reporterName !== undefined && { reporterName: reporterName || null }),
+      ...(twitterUrl !== undefined && { twitterUrl: twitterUrl || null }),
     },
     include: {
       author: { select: { id: true, name: true } },
