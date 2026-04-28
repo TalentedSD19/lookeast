@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-sm">
-        <h1 className="font-serif text-2xl font-bold mb-6 text-center">LookEast Admin</h1>
+        <div className="flex flex-col items-center gap-2 mb-6">
+          <Image src="/android-chrome-192x192.png" alt="LookEast" width={48} height={48} className="rounded-md" />
+          <h1 className="font-serif text-2xl font-bold">LookEast Admin</h1>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
           <div className="space-y-1">

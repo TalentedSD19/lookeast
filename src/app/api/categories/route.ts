@@ -11,12 +11,20 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { role: true },
+  });
+  if (user?.role !== "ADMIN") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { name } = await req.json();
-  if (!name) return NextResponse.json({ error: "Name required" }, { status: 400 });
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return NextResponse.json({ error: "Name required" }, { status: 400 });
+  }
 
-  const slug = slugify(name);
-  const category = await prisma.category.create({ data: { name, slug } });
+  const slug = slugify(name.trim());
+  const category = await prisma.category.create({ data: { name: name.trim(), slug } });
   return NextResponse.json(category, { status: 201 });
 }

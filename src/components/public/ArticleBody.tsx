@@ -13,7 +13,10 @@ const ALLOWED: sanitizeHtml.IOptions = {
     a: ["href", "target", "rel"],
     img: ["src", "alt", "width", "height"],
   },
-  allowedSchemes: ["https", "http"],
+  transformTags: {
+    a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }, false),
+  },
+  allowedSchemes: ["https"],
 };
 
 export default function ArticleBody({ html }: { html: string }) {

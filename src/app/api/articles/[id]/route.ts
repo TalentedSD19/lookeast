@@ -6,13 +6,20 @@ import { slugify } from "@/lib/utils";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
   const { title, slug: slugInput, excerpt, body: content, coverImage, categoryId, status, reporterName, twitterUrl } = body;
 
-  const existing = await prisma.article.findUnique({ where: { id: params.id } });
+  const [existing, actor] = await Promise.all([
+    prisma.article.findUnique({ where: { id: params.id } }),
+    prisma.user.findUnique({ where: { id: session.user.id }, select: { role: true } }),
+  ]);
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  if (actor?.role !== "ADMIN" && existing.authorId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   let slug = existing.slug;
   const desiredSlug = slugInput || (title ? slugify(title) : null);
@@ -51,7 +58,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
 export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const [existing, actor] = await Promise.all([
+    prisma.article.findUnique({ where: { id: params.id } }),
+    prisma.user.findUnique({ where: { id: session.user.id }, select: { role: true } }),
+  ]);
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  if (actor?.role !== "ADMIN" && existing.authorId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   await prisma.article.delete({ where: { id: params.id } });
   return NextResponse.json({ success: true });

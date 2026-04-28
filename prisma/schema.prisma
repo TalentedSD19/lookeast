@@ -13,6 +13,7 @@ model User {
   email     String    @unique
   password  String
   name      String
+  role      UserRole  @default(EDITOR)
   avatarUrl String?
   createdAt DateTime  @default(now())
   articles  Article[]
@@ -84,6 +85,11 @@ model Vote {
 
   @@unique([articleId, voterToken])
   @@index([articleId])
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
 }
 
 enum ArticleStatus {
