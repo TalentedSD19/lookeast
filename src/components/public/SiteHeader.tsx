@@ -1,17 +1,29 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import CategoryNav from "./CategoryNav";
+import SearchBar from "./SearchBar";
 
 export default async function SiteHeader() {
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
 
   return (
     <header className="bg-brand-dark text-white sticky top-0 z-50 shadow-md">
-      <div className="w-full px-6 py-3 flex items-center justify-between gap-6 flex-wrap">
-        <Link href="/" className="font-serif text-2xl font-bold tracking-tight hover:text-brand-red transition-colors">
-          LookEast
+      <div className="w-full px-6 py-3 flex items-center justify-between gap-6">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0">
+          <Image
+            src="/android-chrome-192x192.png"
+            alt="LookEast"
+            width={32}
+            height={32}
+            className="rounded-sm"
+          />
+          <span className="font-serif text-2xl font-bold tracking-tight">LookEast</span>
         </Link>
-        <CategoryNav categories={categories} />
+        <div className="flex items-center gap-5 shrink-0">
+          <CategoryNav categories={categories} />
+          <SearchBar />
+        </div>
       </div>
     </header>
   );

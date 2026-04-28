@@ -84,7 +84,15 @@ export default function RichTextEditor({ value, onChange }: Props) {
       editor!.chain().focus().unsetLink().run();
     } else {
       const url = window.prompt("Enter URL:");
-      if (url) editor!.chain().focus().setLink({ href: url, target: "_blank" }).run();
+      if (url) {
+        try {
+          const parsed = new URL(url);
+          if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return;
+          editor!.chain().focus().setLink({ href: parsed.href, target: "_blank", rel: "noopener noreferrer" }).run();
+        } catch {
+          // invalid URL — ignore
+        }
+      }
     }
   }
 

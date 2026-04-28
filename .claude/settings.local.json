@@ -14,7 +14,10 @@
       "Bash(npm run *)",
       "Bash(npm --version)",
       "Bash(npx kill-port *)",
-      "Bash(npx prisma *)"
+      "Bash(npx prisma *)",
+      "Bash(find \"C:\\\\\\\\D\\\\\\\\KODING SHITZ\\\\\\\\lookeast\\\\\\\\src\\\\\\\\app\" -type f -name \"*.tsx\")",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
