@@ -2,87 +2,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
 
 type Category = { id: string; name: string; slug: string };
 
 export default function CategoryNav({ categories }: { categories: Category[] }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
-  const activeCategory = categories.find((c) => pathname === `/category/${c.slug}`);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const linkClass = (active: boolean) =>
+    cn(
+      "px-3 py-3 text-[0.8rem] font-sans font-medium whitespace-nowrap border-b-2 transition-colors duration-150 tracking-wide",
+      active
+        ? "border-brand-red text-brand-red"
+        : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+    );
 
   return (
-    <nav className="flex items-center gap-6">
-      {/* Categories dropdown */}
-      <div ref={ref} className="relative">
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className={cn(
-            "flex items-center gap-1 text-sm font-medium transition-colors hover:text-brand-red",
-            activeCategory ? "text-brand-red" : "text-gray-300"
-          )}
+    <nav className="flex items-center overflow-x-auto scrollbar-hide -mb-px">
+      <Link href="/" className={linkClass(pathname === "/")}>
+        Home
+      </Link>
+
+      {categories.map((cat) => (
+        <Link
+          key={cat.id}
+          href={`/category/${cat.slug}`}
+          className={linkClass(pathname === `/category/${cat.slug}`)}
         >
-          {activeCategory ? activeCategory.name : "Categories"}
-          <ChevronDown
-            size={14}
-            className={cn("transition-transform", open && "rotate-180")}
-          />
-        </button>
+          {cat.name}
+        </Link>
+      ))}
 
-        {open && (
-          <div className="absolute left-0 top-full mt-2 w-44 bg-white rounded-md shadow-lg ring-1 ring-black/5 py-1 z-50">
-            <Link
-              href="/"
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block px-4 py-2 text-sm transition-colors hover:bg-gray-50",
-                pathname === "/" ? "text-brand-red font-medium" : "text-gray-700"
-              )}
-            >
-              All
-            </Link>
-            <div className="border-t my-1" />
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "block px-4 py-2 text-sm transition-colors hover:bg-gray-50",
-                  pathname === `/category/${cat.slug}`
-                    ? "text-brand-red font-medium"
-                    : "text-gray-700"
-                )}
-              >
-                {cat.name}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* About */}
-      <Link
-        href="/about"
-        className={cn(
-          "text-sm font-medium transition-colors hover:text-brand-red",
-          pathname === "/about" ? "text-brand-red" : "text-gray-300"
-        )}
-      >
+      <Link href="/about" className={linkClass(pathname === "/about")}>
         About
       </Link>
     </nav>

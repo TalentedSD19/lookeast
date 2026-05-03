@@ -23,7 +23,6 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Close dropdown when clicking outside, but not when clicking inside (including results)
   useEffect(() => {
     function handlePointerDown(e: PointerEvent) {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -34,7 +33,6 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
     return () => document.removeEventListener("pointerdown", handlePointerDown);
   }, []);
 
-  // Debounced search
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     const trimmed = query.trim();
@@ -73,9 +71,12 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
 
   return (
     <div ref={containerRef} className="relative">
-      {/* Input */}
-      <div className={`flex items-center bg-white/10 border border-white/20 rounded-md px-3 py-1.5 gap-2 focus-within:bg-white/15 focus-within:border-white/40 transition-colors ${wide ? "w-full" : "w-52"}`}>
-        <Search size={14} className="text-gray-400 shrink-0" />
+      <div
+        className={`flex items-center bg-gray-100 border border-gray-200 rounded-full px-3 py-1.5 gap-2 focus-within:bg-white focus-within:border-gray-400 focus-within:shadow-sm transition-all ${
+          wide ? "w-full" : "w-48"
+        }`}
+      >
+        <Search size={13} className="text-gray-400 shrink-0" />
         <input
           ref={inputRef}
           type="text"
@@ -84,23 +85,26 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
           onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           onFocus={() => { if (results.length > 0) setOpen(true); }}
           placeholder="Search articles…"
-          className="bg-transparent text-white text-sm placeholder-gray-400 outline-none w-full min-w-0"
+          className="bg-transparent text-gray-900 text-sm placeholder-gray-400 outline-none w-full min-w-0"
         />
         {query && (
           <button
             type="button"
-            onPointerDown={(e) => e.preventDefault()} // prevent input blur before clear runs
+            onPointerDown={(e) => e.preventDefault()}
             onClick={clear}
-            className="text-gray-400 hover:text-white transition-colors shrink-0"
+            className="text-gray-400 hover:text-gray-700 transition-colors shrink-0"
           >
-            <X size={14} />
+            <X size={13} />
           </button>
         )}
       </div>
 
-      {/* Dropdown */}
       {open && (
-        <div className={`absolute top-full mt-2 bg-white rounded-md shadow-xl ring-1 ring-black/10 z-50 overflow-hidden ${wide ? "left-0 right-0" : "right-0 w-80"}`}>
+        <div
+          className={`absolute top-full mt-2 bg-white rounded-lg shadow-xl ring-1 ring-black/10 z-50 overflow-hidden ${
+            wide ? "left-0 right-0" : "right-0 w-80"
+          }`}
+        >
           {loading ? (
             <p className="px-4 py-3 text-sm text-gray-500">Searching…</p>
           ) : results.length === 0 ? (
@@ -113,11 +117,7 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
                 <li key={article.slug}>
                   <Link
                     href={`/article/${article.slug}`}
-                    onClick={() => {
-                      setQuery("");
-                      setResults([]);
-                      setOpen(false);
-                    }}
+                    onClick={() => { setQuery(""); setResults([]); setOpen(false); }}
                     className="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                   >
                     {article.coverImage ? (
@@ -132,15 +132,13 @@ export default function SearchBar({ wide = false }: { wide?: boolean }) {
                       <div className="w-14 h-10 rounded bg-gray-100 shrink-0 self-start mt-0.5" />
                     )}
                     <div className="min-w-0">
-                      <p className="text-xs font-medium text-brand-red mb-0.5">
+                      <p className="text-[0.7rem] font-semibold text-brand-red mb-0.5 uppercase tracking-wide">
                         {article.category.name}
                       </p>
                       <p className="text-sm font-semibold text-gray-900 leading-snug line-clamp-2">
                         {article.title}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
-                        {article.excerpt}
-                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{article.excerpt}</p>
                     </div>
                   </Link>
                 </li>
