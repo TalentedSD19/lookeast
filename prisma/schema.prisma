@@ -33,8 +33,13 @@ model Article {
   excerpt      String
   body         String
   coverImage   String?
+  images       Json?
+  subtitle     String?
+  dateline     String?
+  isBreaking   Boolean       @default(false)
   reporterName String?
   twitterUrl   String?
+  seoKeywords  String?
   status       ArticleStatus @default(DRAFT)
   publishedAt  DateTime?
   createdAt    DateTime      @default(now())

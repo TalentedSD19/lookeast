@@ -8,8 +8,8 @@ export default function ArticleGrid({ articles }: { articles: ArticleWithRelatio
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {articles.map((article) => (
-        <ArticleCard key={article.id} article={article} />
+      {articles.map((article, index) => (
+        <ArticleCard key={article.id} article={article} priority={index < 3} />
       ))}
     </div>
   );

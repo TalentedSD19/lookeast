@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import type { Editor } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -15,6 +16,7 @@ import {
 interface Props {
   value: string;
   onChange: (html: string) => void;
+  editorRef?: React.MutableRefObject<Editor | null>;
 }
 
 function ToolbarButton({
@@ -51,7 +53,7 @@ function Divider() {
   return <span className="w-px h-5 bg-gray-300 mx-1 self-center" />;
 }
 
-export default function RichTextEditor({ value, onChange }: Props) {
+export default function RichTextEditor({ value, onChange, editorRef }: Props) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -76,6 +78,10 @@ export default function RichTextEditor({ value, onChange }: Props) {
       editor.commands.setContent(value);
     }
   }, [value, editor]);
+
+  useEffect(() => {
+    if (editorRef) editorRef.current = editor ?? null;
+  }, [editor, editorRef]);
 
   if (!editor) return null;
 

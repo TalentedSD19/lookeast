@@ -1,13 +1,26 @@
 import Link from "next/link";
+import SiteHeader from "@/components/public/SiteHeader";
+import SiteFooter from "@/components/public/SiteFooter";
 
-export default function NotFound() {
+export default async function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-      <h1 className="font-serif text-6xl font-bold text-brand-red mb-4">404</h1>
-      <p className="text-gray-600 mb-6">This page could not be found.</p>
-      <Link href="/" className="text-brand-red underline hover:no-underline">
-        Go to homepage
-      </Link>
-    </div>
+    <>
+      <SiteHeader />
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 py-24">
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400 mb-4">Error 404</p>
+        <h1 className="font-serif text-7xl font-bold text-gray-900 mb-4">Not Found</h1>
+        <div className="w-10 h-0.5 bg-brand-red mb-6 mx-auto" />
+        <p className="text-gray-500 mb-8 text-lg max-w-xs">
+          This page could not be found. It may have been moved or deleted.
+        </p>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-brand-red text-sm font-semibold hover:underline underline-offset-4"
+        >
+          ← Back to Home
+        </Link>
+      </main>
+      <SiteFooter />
+    </>
   );
 }

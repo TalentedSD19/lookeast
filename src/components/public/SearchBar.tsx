@@ -14,7 +14,7 @@ type SearchResult = {
   category: { name: string; slug: string };
 };
 
-export default function SearchBar() {
+export default function SearchBar({ wide = false }: { wide?: boolean }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export default function SearchBar() {
   return (
     <div ref={containerRef} className="relative">
       {/* Input */}
-      <div className="flex items-center w-52 bg-white/10 border border-white/20 rounded-md px-3 py-1.5 gap-2 focus-within:bg-white/15 focus-within:border-white/40 transition-colors">
+      <div className={`flex items-center bg-white/10 border border-white/20 rounded-md px-3 py-1.5 gap-2 focus-within:bg-white/15 focus-within:border-white/40 transition-colors ${wide ? "w-full" : "w-52"}`}>
         <Search size={14} className="text-gray-400 shrink-0" />
         <input
           ref={inputRef}
@@ -100,7 +100,7 @@ export default function SearchBar() {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute top-full mt-2 right-0 w-80 bg-white rounded-md shadow-xl ring-1 ring-black/10 z-50 overflow-hidden">
+        <div className={`absolute top-full mt-2 bg-white rounded-md shadow-xl ring-1 ring-black/10 z-50 overflow-hidden ${wide ? "left-0 right-0" : "right-0 w-80"}`}>
           {loading ? (
             <p className="px-4 py-3 text-sm text-gray-500">Searching…</p>
           ) : results.length === 0 ? (
