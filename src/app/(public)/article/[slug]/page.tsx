@@ -88,10 +88,10 @@ export default async function ArticlePage({ params }: { params: { slug: string }
 
   const tweetId = article.twitterUrl ? extractTweetId(article.twitterUrl) : null;
   const byline = article.reporterName ?? article.author.name;
-  const isBreaking = (article as any).isBreaking;
-  const subtitle = (article as any).subtitle as string | null;
-  const dateline = (article as any).dateline as string | null;
-  const aboutAuthors = (article as any).aboutAuthors as string | null;
+  const isBreaking = article.isBreaking;
+  const subtitle = article.subtitle;
+  const dateline = article.dateline;
+  const aboutAuthors = article.aboutAuthors;
   const mins = readingTime(article.body);
   const multipleAuthors = aboutAuthors?.includes("\n\n") ?? false;
 
