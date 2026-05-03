@@ -15,9 +15,23 @@
       "Bash(npm --version)",
       "Bash(npx kill-port *)",
       "Bash(npx prisma *)",
-      "Bash(find \"C:\\\\\\\\D\\\\\\\\KODING SHITZ\\\\\\\\lookeast\\\\\\\\src\\\\\\\\app\" -type f -name \"*.tsx\")",
+      "Bash(find \"C:\\\\\\\\D\\\\\\\\KODING SHITZ\\\\\\\\eastern-news-network\\\\\\\\src\\\\\\\\app\" -type f -name \"*.tsx\")",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git pull *)",
+      "Bash(git branch *)",
+      "Bash(Get-Content *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\D\\\\KODING SHITZ\\\\eastern-news-network\" -Force)",
+      "Bash(Select-Object -Property Mode, Name)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \"LISTENING\")",
+      "Bash(findstr \":3000 \\\\|:3001 \\\\|:3002 \\\\|:3003 \\\\|:4000 \\\\|:8080 \")",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(npx next *)"
     ]
   }
 }

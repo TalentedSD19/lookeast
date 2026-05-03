@@ -40,14 +40,7 @@ export default function AdminSidebar({ userName, avatarUrl }: AdminSidebarProps)
       {/* ── Mobile top bar ── */}
       <div className="md:hidden bg-brand-dark text-white sticky top-0 z-50">
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Image
-              src="/android-chrome-192x192.png"
-              alt="Eastern News Network"
-              width={26}
-              height={26}
-              className="rounded-sm"
-            />
+          <Link href="/" className="hover:opacity-90 transition-opacity">
             <span className="font-serif text-lg font-bold">ENN Admin</span>
           </Link>
           <button
@@ -104,14 +97,7 @@ export default function AdminSidebar({ userName, avatarUrl }: AdminSidebarProps)
       {/* ── Desktop sidebar ── */}
       <aside className="hidden md:flex w-56 shrink-0 bg-brand-dark text-white min-h-screen flex-col">
         <div className="px-6 py-5 border-b border-white/10">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <Image
-              src="/android-chrome-192x192.png"
-              alt="Eastern News Network"
-              width={28}
-              height={28}
-              className="rounded-sm"
-            />
+          <Link href="/" className="hover:opacity-90 transition-opacity">
             <span className="font-serif text-xl font-bold">ENN</span>
           </Link>
         </div>

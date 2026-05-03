@@ -20,8 +20,10 @@ export default async function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 w-full px-6 py-10">
-        <ArticleGrid articles={articles as ArticleWithRelations[]} />
+      <main className="flex-1 w-full">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-8">
+          <ArticleGrid articles={articles as ArticleWithRelations[]} />
+        </div>
       </main>
       <SiteFooter />
     </>

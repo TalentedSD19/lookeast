@@ -41,11 +41,25 @@ export default function CommentSection({ articleId }: { articleId: string }) {
   }
 
   return (
-    <section className="mt-12 border-t pt-8">
-      <h2 className="font-serif text-2xl font-bold mb-6">Comments</h2>
+    <section className="mt-4 border-t border-gray-200 pt-10">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400 mb-2">
+        Discussion
+      </p>
+      <h2 className="font-serif text-2xl font-bold text-gray-900 mb-8">
+        Reader Comments
+        {comments.length > 0 && (
+          <span className="ml-2 text-base font-normal text-gray-400">({comments.length})</span>
+        )}
+      </h2>
 
-      <form onSubmit={handleSubmit} className="mb-8 space-y-3">
-        {error && <p className="text-sm text-red-500">{error}</p>}
+      {/* Comment form */}
+      <form onSubmit={handleSubmit} className="mb-10 bg-gray-50 rounded-sm border border-gray-200 p-5 space-y-3">
+        <p className="text-sm font-semibold text-gray-700 mb-1">Leave a comment</p>
+        {error && (
+          <p className="text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded px-3 py-2">
+            {error}
+          </p>
+        )}
         <input
           type="text"
           placeholder="Your name"
@@ -53,37 +67,46 @@ export default function CommentSection({ articleId }: { articleId: string }) {
           onChange={(e) => setName(e.target.value)}
           required
           maxLength={100}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+          className="w-full rounded-sm border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red transition"
         />
         <textarea
-          placeholder="Leave a comment…"
+          placeholder="Share your thoughts on this article…"
           value={body}
           onChange={(e) => setBody(e.target.value)}
           required
           maxLength={2000}
           rows={4}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 resize-none"
+          className="w-full rounded-sm border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red transition resize-none"
         />
-        <button
-          type="submit"
-          disabled={submitting}
-          className="px-5 py-2 rounded-md bg-brand-red text-white text-sm font-medium hover:bg-brand-red/90 disabled:opacity-50"
-        >
-          {submitting ? "Posting…" : "Post Comment"}
-        </button>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-gray-400">{body.length}/2000 characters</p>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="px-5 py-2 rounded-sm bg-brand-red text-white text-sm font-semibold hover:bg-brand-red/90 disabled:opacity-50 transition-colors"
+          >
+            {submitting ? "Posting…" : "Post Comment"}
+          </button>
+        </div>
       </form>
 
-      <div className="space-y-6">
+      {/* Comment list */}
+      <div className="space-y-0">
         {comments.length === 0 && (
-          <p className="text-gray-400 text-sm">No comments yet. Be the first!</p>
+          <p className="text-gray-400 text-sm py-4">
+            No comments yet. Be the first to share your perspective.
+          </p>
         )}
-        {comments.map((c) => (
-          <div key={c.id} className="border-b pb-4">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-semibold text-sm">{c.authorName}</span>
+        {comments.map((c, i) => (
+          <div
+            key={c.id}
+            className={`py-5 ${i < comments.length - 1 ? "border-b border-gray-100" : ""}`}
+          >
+            <div className="flex items-baseline gap-2.5 mb-2">
+              <span className="font-semibold text-sm text-gray-900">{c.authorName}</span>
               <span className="text-gray-400 text-xs">{formatDate(c.createdAt)}</span>
             </div>
-            <p className="text-gray-700 text-sm whitespace-pre-wrap">{c.body}</p>
+            <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{c.body}</p>
           </div>
         ))}
       </div>

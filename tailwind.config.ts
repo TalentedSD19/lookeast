@@ -36,7 +36,7 @@ const config: Config = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         "brand-red": "#C8102E",
-        "brand-dark": "#1A1A2E",
+        "brand-dark": "#111111",
       },
       borderRadius: {
         lg: "var(--radius)",

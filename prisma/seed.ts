@@ -8,15 +8,15 @@ async function main() {
   const password2 = await bcrypt.hash("editor1234", 12);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@lookeast.com" },
+    where: { email: "admin@easternnewsnetwork.com" },
     update: {},
-    create: { email: "admin@lookeast.com", password: password1, name: "Admin" },
+    create: { email: "admin@easternnewsnetwork.com", password: password1, name: "Admin" },
   });
 
   const editor = await prisma.user.upsert({
-    where: { email: "editor@lookeast.com" },
+    where: { email: "editor@easternnewsnetwork.com" },
     update: {},
-    create: { email: "editor@lookeast.com", password: password2, name: "Editor" },
+    create: { email: "editor@easternnewsnetwork.com", password: password2, name: "Editor" },
   });
 
   const categories = [

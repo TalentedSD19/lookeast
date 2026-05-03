@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ArticleImageManager, { type ArticleImage } from "./ArticleImageManager";
 import ArticleBody from "@/components/public/ArticleBody";
-import { slugify, formatDate } from "@/lib/utils";
+import { slugify, formatDate, formatDateTimeIST } from "@/lib/utils";
 import type { ArticleWithRelations } from "@/types";
 
 const RichTextEditor = dynamic(() => import("./RichTextEditor"), { ssr: false });
@@ -69,6 +69,7 @@ export default function ArticleForm({ article, categories }: Props) {
   const [images, setImages] = useState<ArticleImage[]>(() => initImages(article));
   const [categoryId, setCategoryId] = useState(article?.categoryId ?? "");
   const [twitterUrl, setTwitterUrl] = useState(article?.twitterUrl ?? "");
+  const [aboutAuthors, setAboutAuthors] = useState((article as any)?.aboutAuthors ?? "");
   const [status, setStatus] = useState<"DRAFT" | "PUBLISHED">(article?.status ?? "DRAFT");
 
   // ── UI state ─────────────────────────────────────────────────────────────
@@ -111,7 +112,7 @@ export default function ArticleForm({ article, categories }: Props) {
             title, slug, subtitle, dateline, isBreaking,
             reporterName, excerpt, body,
             coverImage: images[0]?.url ?? null, images,
-            categoryId, twitterUrl, seoKeywords, status,
+            categoryId, twitterUrl, seoKeywords, aboutAuthors, status,
           }),
         });
         if (res.ok) {
@@ -130,7 +131,7 @@ export default function ArticleForm({ article, categories }: Props) {
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, slug, subtitle, dateline, isBreaking, reporterName, seoKeywords,
-      excerpt, body, images, categoryId, twitterUrl, status, article?.id]);
+      excerpt, body, images, categoryId, twitterUrl, aboutAuthors, status, article?.id]);
 
   // ── Submit ────────────────────────────────────────────────────────────────
   async function handleSubmit(e: React.FormEvent) {
@@ -143,7 +144,7 @@ export default function ArticleForm({ article, categories }: Props) {
       title, slug, subtitle, dateline, isBreaking,
       reporterName, excerpt, body,
       coverImage: images[0]?.url ?? null, images,
-      categoryId, twitterUrl, seoKeywords, status,
+      categoryId, twitterUrl, seoKeywords, aboutAuthors, status,
     };
 
     const url = article ? `/api/articles/${article.id}` : "/api/articles";
@@ -240,7 +241,7 @@ export default function ArticleForm({ article, categories }: Props) {
                   {dateline} —{" "}
                 </span>
               )}
-              Reported by {previewByline} · {formatDate(new Date())}
+              Reported by {previewByline} · {formatDateTimeIST(new Date())}
             </p>
 
             {images[0] && (
@@ -261,6 +262,13 @@ export default function ArticleForm({ article, categories }: Props) {
               <ArticleBody html={body} />
             ) : (
               <p className="text-gray-300 italic">Article body will appear here…</p>
+            )}
+
+            {aboutAuthors && (
+              <div className="mt-10 border-t pt-6">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">About the Author{aboutAuthors.includes("\n\n") ? "s" : ""}</h3>
+                <div className="text-sm text-gray-600 whitespace-pre-line">{aboutAuthors}</div>
+              </div>
             )}
           </article>
         </div>
@@ -503,6 +511,23 @@ export default function ArticleForm({ article, categories }: Props) {
             placeholder="https://twitter.com/user/status/..."
           />
           <p className="text-xs text-gray-400">Paste a tweet URL to embed it inside the article.</p>
+        </div>
+
+        {/* About Authors */}
+        <div className="space-y-1">
+          <Label htmlFor="aboutAuthors">
+            About the Author(s) <span className="text-gray-400 font-normal">(optional)</span>
+          </Label>
+          <Textarea
+            id="aboutAuthors"
+            value={aboutAuthors}
+            onChange={(e) => setAboutAuthors(e.target.value)}
+            rows={4}
+            placeholder={"e.g. Rina Chowdhury is a senior correspondent covering politics and governance.\n\nArjun Sen is a data journalist based in Mumbai."}
+          />
+          <p className="text-xs text-gray-400">
+            Appears at the bottom of the published article. Use a blank line to separate multiple author bios.
+          </p>
         </div>
 
         {/* Status */}
