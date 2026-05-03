@@ -26,7 +26,7 @@ export default function ArticleCard({ article }: { article: ArticleWithRelations
         </h2>
         <p className="text-gray-500 text-sm line-clamp-2 mb-3">{article.excerpt}</p>
         <div className="text-xs text-gray-400">
-          {article.author.name} · {formatDate(article.publishedAt ?? article.createdAt)}
+          {article.reporterName ?? article.author.name} · {formatDate(article.publishedAt ?? article.createdAt)}
         </div>
       </div>
     </Link>

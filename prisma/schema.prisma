@@ -35,6 +35,7 @@ model Article {
   coverImage   String?
   reporterName String?
   twitterUrl   String?
+  seoKeywords  String?
   status       ArticleStatus @default(DRAFT)
   publishedAt  DateTime?
   createdAt    DateTime      @default(now())

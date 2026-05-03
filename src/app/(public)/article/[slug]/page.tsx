@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import SiteHeader from "@/components/public/SiteHeader";
 import SiteFooter from "@/components/public/SiteFooter";
@@ -14,6 +15,24 @@ import { formatDate } from "@/lib/utils";
 import { extractTweetId } from "@/lib/extractTweetId";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const article = await prisma.article.findUnique({
+    where: { slug: params.slug, status: "PUBLISHED" },
+    select: { title: true, excerpt: true, coverImage: true, seoKeywords: true },
+  });
+  if (!article) return {};
+  return {
+    title: article.title,
+    description: article.excerpt,
+    keywords: article.seoKeywords ?? undefined,
+    openGraph: {
+      title: article.title,
+      description: article.excerpt,
+      ...(article.coverImage && { images: [{ url: article.coverImage }] }),
+    },
+  };
+}
 
 export default async function ArticlePage({ params }: { params: { slug: string } }) {
   const article = await prisma.article.findUnique({

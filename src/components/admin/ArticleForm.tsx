@@ -25,6 +25,8 @@ export default function ArticleForm({ article, categories }: Props) {
   const [title, setTitle] = useState(article?.title ?? "");
   const [slug, setSlug] = useState(article?.slug ?? "");
   const [reporterName, setReporterName] = useState(article?.reporterName ?? "");
+  const [seoKeywords, setSeoKeywords] = useState(article?.seoKeywords ?? "");
+  const [keywordInput, setKeywordInput] = useState("");
   const [excerpt, setExcerpt] = useState(article?.excerpt ?? "");
   const [body, setBody] = useState(article?.body ?? "");
   const [coverImage, setCoverImage] = useState(article?.coverImage ?? "");
@@ -43,7 +45,7 @@ export default function ArticleForm({ article, categories }: Props) {
     setSaving(true);
     setError("");
 
-    const payload = { title, slug, reporterName, excerpt, body, coverImage, categoryId, twitterUrl, status };
+    const payload = { title, slug, reporterName, excerpt, body, coverImage, categoryId, twitterUrl, seoKeywords, status };
     const url = article ? `/api/articles/${article.id}` : "/api/articles";
     const method = article ? "PATCH" : "POST";
 
@@ -85,6 +87,58 @@ export default function ArticleForm({ article, categories }: Props) {
           onChange={(e) => setReporterName(e.target.value)}
           placeholder="e.g. Rina Chowdhury"
         />
+      </div>
+
+      <div className="space-y-1">
+        <Label htmlFor="seoKeywords">SEO Keywords</Label>
+        <div className="flex gap-2">
+          <Input
+            id="seoKeywords"
+            value={keywordInput}
+            onChange={(e) => setKeywordInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                const kw = keywordInput.trim().replace(/,$/, "");
+                if (!kw) return;
+                const existing = seoKeywords ? seoKeywords.split(",").map((k) => k.trim()) : [];
+                if (!existing.includes(kw)) setSeoKeywords([...existing, kw].join(","));
+                setKeywordInput("");
+              }
+            }}
+            placeholder="Type a keyword and press Enter"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const kw = keywordInput.trim();
+              if (!kw) return;
+              const existing = seoKeywords ? seoKeywords.split(",").map((k) => k.trim()) : [];
+              if (!existing.includes(kw)) setSeoKeywords([...existing, kw].join(","));
+              setKeywordInput("");
+            }}
+            className="shrink-0 px-3 py-1 text-sm rounded-md border border-input bg-transparent hover:bg-gray-50"
+          >
+            Add
+          </button>
+        </div>
+        {seoKeywords && (
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {seoKeywords.split(",").map((kw) => kw.trim()).filter(Boolean).map((kw) => (
+              <span key={kw} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gray-100 text-xs text-gray-700">
+                {kw}
+                <button
+                  type="button"
+                  onClick={() => setSeoKeywords(seoKeywords.split(",").map((k) => k.trim()).filter((k) => k && k !== kw).join(","))}
+                  className="text-gray-400 hover:text-gray-700 leading-none"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <p className="text-xs text-gray-400">Keywords help search engines understand what this article is about.</p>
       </div>
 
       <div className="space-y-1">
