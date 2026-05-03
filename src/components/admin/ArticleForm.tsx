@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ArticleImageManager, { type ArticleImage } from "./ArticleImageManager";
 import ArticleBody from "@/components/public/ArticleBody";
-import { slugify, formatDate, formatDateTimeIST } from "@/lib/utils";
+import { slugify, formatDateTimeIST } from "@/lib/utils";
 import type { ArticleWithRelations } from "@/types";
 
 const RichTextEditor = dynamic(() => import("./RichTextEditor"), { ssr: false });
@@ -58,9 +58,9 @@ export default function ArticleForm({ article, categories }: Props) {
   // ── Core fields ──────────────────────────────────────────────────────────
   const [title, setTitle] = useState(article?.title ?? "");
   const [slug, setSlug] = useState(article?.slug ?? "");
-  const [subtitle, setSubtitle] = useState((article as any)?.subtitle ?? "");
-  const [dateline, setDateline] = useState((article as any)?.dateline ?? "");
-  const [isBreaking, setIsBreaking] = useState((article as any)?.isBreaking ?? false);
+  const [subtitle, setSubtitle] = useState(article?.subtitle ?? "");
+  const [dateline, setDateline] = useState(article?.dateline ?? "");
+  const [isBreaking, setIsBreaking] = useState(article?.isBreaking ?? false);
   const [reporterName, setReporterName] = useState(article?.reporterName ?? "");
   const [seoKeywords, setSeoKeywords] = useState(article?.seoKeywords ?? "");
   const [keywordInput, setKeywordInput] = useState("");
@@ -69,7 +69,7 @@ export default function ArticleForm({ article, categories }: Props) {
   const [images, setImages] = useState<ArticleImage[]>(() => initImages(article));
   const [categoryId, setCategoryId] = useState(article?.categoryId ?? "");
   const [twitterUrl, setTwitterUrl] = useState(article?.twitterUrl ?? "");
-  const [aboutAuthors, setAboutAuthors] = useState((article as any)?.aboutAuthors ?? "");
+  const [aboutAuthors, setAboutAuthors] = useState(article?.aboutAuthors ?? "");
   const [status, setStatus] = useState<"DRAFT" | "PUBLISHED">(article?.status ?? "DRAFT");
 
   // ── UI state ─────────────────────────────────────────────────────────────
