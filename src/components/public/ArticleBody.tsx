@@ -11,7 +11,9 @@ const ALLOWED: sanitizeHtml.IOptions = {
   ],
   allowedAttributes: {
     a: ["href", "target", "rel"],
-    img: ["src", "alt", "width", "height"],
+    img: ["src", "alt", "width", "height", "class"],
+    figure: ["class"],
+    figcaption: ["class"],
   },
   transformTags: {
     a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }, false),

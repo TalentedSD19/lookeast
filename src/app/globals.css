@@ -1,3 +1,6 @@
+/* react-image-crop — imported here instead of inside the component to avoid Turbopack CSS-in-node_modules issues */
+@import "react-image-crop/dist/ReactCrop.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -38,4 +41,25 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* ── Inline article images (inserted via the photo panel, inside the prose body) ── */
+
+/* Half-width, centred */
+.prose img {
+  display: block !important;
+  width: 50% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Caption: a paragraph whose sole child is an <em> (our insert pattern) */
+.prose p:has(> em:only-child) {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.8125rem !important;
+  line-height: 1.4;
+  margin-top: 0.25rem !important;
+  margin-bottom: 1.5rem !important;
+  font-style: normal;
 }

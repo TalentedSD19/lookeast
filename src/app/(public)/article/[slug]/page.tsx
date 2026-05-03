@@ -61,9 +61,26 @@ export default async function ArticlePage({ params }: { params: { slug: string }
       <SiteHeader />
       <ViewTracker articleId={article.id} />
       <main className="flex-1 max-w-3xl mx-auto px-4 py-10">
-        <Badge className="bg-brand-red text-white mb-4">{article.category.name}</Badge>
-        <h1 className="font-serif text-4xl font-bold leading-tight mb-4">{article.title}</h1>
+        <div className="flex items-center gap-2 flex-wrap mb-4">
+          {(article as any).isBreaking && (
+            <span className="bg-brand-red text-white text-[11px] font-black px-2 py-0.5 rounded tracking-widest uppercase animate-pulse">
+              Breaking
+            </span>
+          )}
+          <Badge className="bg-brand-red text-white">{article.category.name}</Badge>
+        </div>
+        <h1 className="font-serif text-4xl font-bold leading-tight mb-2">{article.title}</h1>
+        {(article as any).subtitle && (
+          <p className="font-serif text-xl text-gray-500 mb-4 leading-snug">
+            {(article as any).subtitle}
+          </p>
+        )}
         <p className="text-gray-500 text-sm mb-3">
+          {(article as any).dateline && (
+            <span className="font-semibold text-gray-700 uppercase tracking-wide">
+              {(article as any).dateline} —{" "}
+            </span>
+          )}
           Reported by {byline} · {formatDate(article.publishedAt ?? article.createdAt)}
         </p>
         <VoteBar articleId={article.id} initialUp={initialUp} initialDown={initialDown} />

@@ -24,11 +24,18 @@ export async function POST(req: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, excerpt, body: content, coverImage, categoryId, status, reporterName, twitterUrl, seoKeywords } = body;
+  const {
+    title, excerpt, body: content, coverImage, images,
+    subtitle, dateline, isBreaking,
+    categoryId, status, reporterName, twitterUrl, seoKeywords,
+  } = body;
 
   if (!title || !excerpt || !content || !categoryId) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
+
+  // Derive coverImage from first image in the array if not explicitly provided
+  const resolvedCover = coverImage ?? (Array.isArray(images) && images[0]?.url ? images[0].url : null);
 
   const baseSlug = slugify(title);
   let slug = baseSlug;
@@ -43,7 +50,11 @@ export async function POST(req: NextRequest) {
       slug,
       excerpt,
       body: content,
-      coverImage: coverImage || null,
+      coverImage: resolvedCover || null,
+      images: Array.isArray(images) ? images : [],
+      subtitle: subtitle || null,
+      dateline: dateline || null,
+      isBreaking: isBreaking === true,
       reporterName: reporterName || null,
       twitterUrl: twitterUrl || null,
       seoKeywords: seoKeywords || null,

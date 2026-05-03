@@ -9,7 +9,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  const { title, slug: slugInput, excerpt, body: content, coverImage, categoryId, status, reporterName, twitterUrl, seoKeywords } = body;
+  const {
+    title, slug: slugInput, excerpt, body: content, coverImage, images,
+    subtitle, dateline, isBreaking,
+    categoryId, status, reporterName, twitterUrl, seoKeywords,
+  } = body;
+  const resolvedCover = coverImage ?? (Array.isArray(images) && images[0]?.url ? images[0].url : undefined);
 
   const [existing, actor] = await Promise.all([
     prisma.article.findUnique({ where: { id: params.id } }),
@@ -40,7 +45,11 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       slug,
       ...(excerpt && { excerpt }),
       ...(content && { body: content }),
-      ...(coverImage !== undefined && { coverImage }),
+      ...(resolvedCover !== undefined && { coverImage: resolvedCover }),
+      ...(images !== undefined && { images: Array.isArray(images) ? images : [] }),
+      ...(subtitle !== undefined && { subtitle: subtitle || null }),
+      ...(dateline !== undefined && { dateline: dateline || null }),
+      ...(isBreaking !== undefined && { isBreaking: isBreaking === true }),
       ...(categoryId && { categoryId }),
       ...(status && { status }),
       ...(nowPublishing && { publishedAt: new Date() }),
