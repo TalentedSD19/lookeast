@@ -39,8 +39,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-sm">
         <div className="flex flex-col items-center gap-2 mb-6">
-          <Image src="/android-chrome-192x192.png" alt="LookEast" width={48} height={48} className="rounded-md" />
-          <h1 className="font-serif text-2xl font-bold">LookEast Admin</h1>
+          <Image src="/android-chrome-192x192.png" alt="Eastern News Network" width={48} height={48} className="rounded-md" />
+          <h1 className="font-serif text-2xl font-bold">ENN Admin</h1>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}

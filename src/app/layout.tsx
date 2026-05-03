@@ -3,8 +3,8 @@ import "./globals.css";
 import Providers from "./providers";
 
 export const metadata: Metadata = {
-  title: "LookEast",
-  description: "News from the East",
+  title: "Eastern News Network",
+  description: "Independent news from the East — politics, economy, society, and culture.",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
