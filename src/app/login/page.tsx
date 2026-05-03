@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -36,11 +35,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-sm">
-        <div className="flex flex-col items-center gap-2 mb-6">
-          <Image src="/android-chrome-192x192.png" alt="Eastern News Network" width={48} height={48} className="rounded-md" />
-          <h1 className="font-serif text-2xl font-bold">ENN Admin</h1>
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+      <div className="bg-white border border-gray-200 shadow-sm p-8 w-full max-w-sm">
+        <div className="flex flex-col items-center gap-1 mb-6">
+          <span className="font-serif font-bold text-2xl text-gray-900 tracking-tight">Eastern News Network</span>
+          <span className="text-[0.6rem] tracking-[0.2em] text-gray-400 uppercase font-sans">Admin Access</span>
+          <div className="w-6 h-0.5 bg-brand-red mt-3" />
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}

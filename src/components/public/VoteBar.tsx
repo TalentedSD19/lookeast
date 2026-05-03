@@ -171,7 +171,7 @@ export default function VoteBar({ articleId, initialUp, initialDown }: Props) {
               style={{ width: `${downPct}%` }}
             />
           </div>
-          <div className="flex justify-between text-[11px] text-gray-400 mt-2">
+          <div className="flex flex-wrap justify-between gap-x-3 gap-y-1 text-[11px] text-gray-400 mt-2">
             <span>{upPct}% found this credible</span>
             <span>{total} {total === 1 ? "reader" : "readers"} voted</span>
             <span>{downPct}% flagged it</span>
